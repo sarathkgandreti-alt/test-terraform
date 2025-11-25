@@ -4,7 +4,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "main" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/28"
+  cidr_block = "10.0.0.0/28"
   tags = {
     Name = "test_subnet"
   }
@@ -12,7 +12,7 @@ resource "aws_subnet" "main" {
 
 resource "aws_network_interface" "example" {
   subnet_id   = aws_subnet.main.id
-  private_ips = ["10.0.1.5"]
+  private_ips = ["10.0.0.5"]
 
   tags = {
     Name = "primary_network_interface"
