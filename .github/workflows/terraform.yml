@@ -172,3 +172,8 @@ jobs:
       # Generates an execution plan for Terraform
       - name: Terraform Plan
         run: terraform -chdir=ec2-instance plan -input=true
+
+      - name: Terraform Apply
+        run: terraform -chdir=ec2-instance apply -input=true
+
+      
