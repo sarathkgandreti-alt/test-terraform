@@ -132,11 +132,27 @@ jobs:
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
+      - name: Ensure S3 backend state exists
+        run: |
+          set -eo pipefail
+          BUCKET="test-skg-terraform-s3-buck"
+          KEY="ec2-instance/terraform.tfstate"
+          echo "Checking for state file s3://$BUCKET/$KEY"
+          if aws s3api head-object --bucket "$BUCKET" --key "$KEY" >/dev/null 2>&1; then
+            echo "State file exists in s3://$BUCKET/$KEY"
+          else
+            echo "State file not found. Attempting to create a minimal state file."
+            echo '{"version":4,"terraform_version":"1.9.0","serial":0,"lineage":"","resources":[]}' > /tmp/terraform.tfstate
+            if aws s3 cp /tmp/terraform.tfstate "s3://$BUCKET/$KEY"; then
+              echo "Created minimal state file in s3://$BUCKET/$KEY"
+            else
+              echo "Failed to upload state file. Ensure the assumed role has S3 permissions (s3:HeadObject, s3:GetObject, s3:PutObject, s3:ListBucket)." >&2
+              exit 1
+            fi
+          fi
       
 
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v4
+      
   
       # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
       - name: Setup Terraform
@@ -155,4 +171,9 @@ jobs:
   
       # Generates an execution plan for Terraform
       - name: Terraform Plan
-        run: terraform plan -input=false
+        run: terraform -chdir=ec2-instance plan -input=true
+
+      - name: Terraform Apply
+        run: terraform -chdir=ec2-instance apply -input=true -auto-approve
+
+      
