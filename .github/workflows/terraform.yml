@@ -106,8 +106,7 @@ on:
     branches: [ main ]
 
 env:
-  
-  AWS_REGION : "us-east-2" #Change to reflect your Region
+  AWS_REGION: "us-east-2" #Change to reflect your Region
 
 defaults:
   run:
@@ -115,14 +114,14 @@ defaults:
 
 # Permission can be added at job level or workflow level    
 permissions:
-      id-token: write   # This is required for requesting the JWT
-      contents: read    # This is required for actions/checkout
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 jobs:
   AssumeRoleAndCallIdentity:
     runs-on: ubuntu-latest
     steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
@@ -135,9 +134,7 @@ jobs:
           aws sts get-caller-identity
       
 
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v4
+      
   
       # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
       - name: Setup Terraform
@@ -148,12 +145,12 @@ jobs:
   
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
-        run: terraform init
+        run: terraform -chdir=ec2-instance init
   
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
-        run: terraform fmt -check
+        run: terraform -chdir=ec2-instance fmt -check
   
       # Generates an execution plan for Terraform
       - name: Terraform Plan
-        run: terraform plan -input=false
+        run: terraform -chdir=ec2-instance plan -input=false
