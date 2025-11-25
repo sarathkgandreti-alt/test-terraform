@@ -109,6 +109,10 @@ env:
   
   AWS_REGION : "us-east-2" #Change to reflect your Region
 
+defaults:
+  run:
+    shell: bash
+
 # Permission can be added at job level or workflow level    
 permissions:
       id-token: write   # This is required for requesting the JWT
@@ -129,7 +133,7 @@ jobs:
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
-
+      
 
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
