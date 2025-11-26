@@ -48,6 +48,16 @@ resource "aws_route_table" "route_table_vpc1" {
 resource "aws_route_table" "route_table_vpc2" {
   vpc_id = aws_vpc.vpc2.id
 }
+
+# Associate subnets with route tables
+resource "aws_route_table_association" "vpc1_association" {
+  subnet_id      = aws_subnet.subnet1.id
+  route_table_id = aws_route_table.route_table_vpc1.id
+}
+resource "aws_route_table_association" "vpc2_association" {
+  subnet_id      = aws_subnet.subnet2.id
+  route_table_id = aws_route_table.route_table_vpc2.id
+}
 resource "aws_route" "route_to_vpc2" {
   route_table_id            = aws_route_table.route_table_vpc1.id  # Specify route table ID of VPC1
   destination_cidr_block    = aws_vpc.vpc2.cidr_block  # CIDR block of VPC2
