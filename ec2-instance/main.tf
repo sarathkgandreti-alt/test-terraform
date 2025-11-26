@@ -35,13 +35,9 @@ resource "aws_vpc_peering_connection" "peering" {
   auto_accept = false  # Specify if the peering connection should be automatically accepted
 }
 # Accept VPC peering connection on accepter side
-provider "aws" {
-  alias  = "accepter"
-  region = "us-east-2"  # Specify the region where the VPC peering connection exists
-}
 resource "aws_vpc_peering_connection_accepter" "accepter" {
-  provider = aws.accepter
   vpc_peering_connection_id = aws_vpc_peering_connection.peering.id
+  auto_accept               = true
 }
 
 
