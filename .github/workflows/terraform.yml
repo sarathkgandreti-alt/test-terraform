@@ -175,8 +175,9 @@ jobs:
       - name: Terraform Apply
         run: terraform -chdir=ec2-instance apply -input=true -auto-approve
 
-      - name: Terraform destroy
-        run: terraform -chdir=ec2-instance destroy -input=true -auto-approve
+      # - name: Terraform destroy
+        # run: terraform -chdir=ec2-instance destroy -input=true -auto-approve
+
 
 
       
