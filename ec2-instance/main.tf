@@ -45,10 +45,10 @@ resource "aws_security_group" "sg_vpc1" {
 
 # Linux Instance (Amazon Linux 2) in VPC1
 resource "aws_instance" "linux_instance" {
-  ami                    = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 in us-east-2
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.subnet1.id
-  security_groups        = [aws_security_group.sg_vpc1.id]
+  ami                         = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 in us-east-2
+  instance_type               = "t2.micro"
+  subnet_id                   = aws_subnet.subnet1.id
+  vpc_security_group_ids      = [aws_security_group.sg_vpc1.id]
   associate_public_ip_address = true
 
   tags = {
@@ -110,10 +110,10 @@ resource "aws_security_group" "sg_vpc2" {
 
 # Windows Instance in VPC2
 resource "aws_instance" "windows_instance" {
-  ami                    = "ami-0bb3fad3c0286ebd5" # Windows Server 2019 Base in us-east-2
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.subnet2.id
-  security_groups        = [aws_security_group.sg_vpc2.id]
+  ami                         = "ami-0bb3fad3c0286ebd5" # Windows Server 2019 Base in us-east-2
+  instance_type               = "t2.micro"
+  subnet_id                   = aws_subnet.subnet2.id
+  vpc_security_group_ids      = [aws_security_group.sg_vpc2.id]
   associate_public_ip_address = true
 
   tags = {
